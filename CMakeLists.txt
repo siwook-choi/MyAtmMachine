@@ -9,8 +9,8 @@ include_directories(
 )
 
 set(SOURCES
+    src/atm-machine.cpp
     src/atm-state.cpp
-    src/atm.cpp
     src/cash-card.cpp
     src/operation-result.cpp
     src/pin-number.cpp

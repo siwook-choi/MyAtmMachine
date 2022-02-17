@@ -14,7 +14,7 @@ class AtmMachineOperations
 
     virtual OperationResult insertCard(const CashCard &card) = 0;
     virtual OperationResult ejectCard() = 0;
-    virtual OperationResult authenticate(const PinNumber &pin) = 0;
+    virtual OperationResult enterPin(const PinNumber &pin) = 0;
     virtual OperationResult selectAccount(AccountType type) = 0;
 
     virtual OperationResult seeBalance() = 0;

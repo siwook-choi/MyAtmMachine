@@ -6,14 +6,22 @@
 class OperationResult
 {
 public:
-    explicit OperationResult(int code = 0, const std::string &message = "");
+    enum class ErrorCode
+    {
+        Ok=0,
+        InvalidOperation,
+        TransactionFailed,
+        OutOfCash,
+        AuthenticationFailed
+    };
+    explicit OperationResult(ErrorCode code = ErrorCode::Ok, const std::string &message = "");
 
     bool isSucceed() const;
-    int getCode() const;
+    ErrorCode getCode() const;
     const std::string &getMessage() const;
 
 private:
-    int code_;
+    ErrorCode code_;
     std::string message_;
 };
 

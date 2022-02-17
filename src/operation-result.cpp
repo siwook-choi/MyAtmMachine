@@ -1,6 +1,6 @@
 #include "operation-result.h"
 
-OperationResult::OperationResult(int code, const std::string &message)
+OperationResult::OperationResult(ErrorCode code, const std::string &message)
     : code_(code)
     , message_(message)
 {
@@ -8,10 +8,10 @@ OperationResult::OperationResult(int code, const std::string &message)
 
 bool OperationResult::isSucceed() const
 {
-    return code_ == 0;
+    return code_ == ErrorCode::Ok;
 }
 
-int OperationResult::getCode() const
+OperationResult::ErrorCode OperationResult::getCode() const
 {
     return code_;
 }

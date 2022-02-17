@@ -99,7 +99,11 @@ void PerformingTransactionState::react(const Canceled &event)
 
 void PerformingTransactionState::react(const ErrorOccured &event)
 {
-    transit<EjectingCardState>();
+    if (event.result.getCode() == OperationResult::ErrorCode::OutOfCash) {
+        transit<OutOfCashState>();
+    } else {
+        transit<EjectingCardState>();
+    }
 }
 
 void PerformingTransactionState::react(const TransactionContinued &event)
@@ -110,11 +114,6 @@ void PerformingTransactionState::react(const TransactionContinued &event)
 void PerformingTransactionState::react(const TransactionFinished &event)
 {
     transit<EjectingCardState>();
-}
-
-void PerformingTransactionState::react(const OutOfCash &event)
-{
-    transit<OutOfCashState>();
 }
 
 StateEnum EjectingCardState::getState() const
