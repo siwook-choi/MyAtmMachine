@@ -112,12 +112,27 @@ void PerformingTransactionState::react(const TransactionFinished &event)
     transit<EjectingCardState>();
 }
 
+void PerformingTransactionState::react(const OutOfCash &event)
+{
+    transit<OutOfCashState>();
+}
+
 StateEnum EjectingCardState::getState() const
 {
     return StateEnum::EjectingCardState;
 }
 
 void EjectingCardState::react(const CardEjected &event)
+{
+    transit<IdleState>();
+}
+
+StateEnum OutOfCashState::getState() const
+{
+    return StateEnum::OutOfCashState;
+}
+
+void OutOfCashState::react(const CashRefilled &event)
 {
     transit<IdleState>();
 }

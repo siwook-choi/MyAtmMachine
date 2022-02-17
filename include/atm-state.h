@@ -25,6 +25,8 @@ struct AccountSelected : tinyfsm::Event { };
 struct TransactionChosen : tinyfsm::Event { };
 struct TransactionContinued : tinyfsm::Event { };
 struct TransactionFinished : tinyfsm::Event { };
+struct OutOfCash : tinyfsm::Event { };
+struct CashRefilled : tinyfsm::Event { };
 
 enum class StateEnum
 {
@@ -34,7 +36,8 @@ enum class StateEnum
     SelectingAccountState,
     ChoosingTransactionState,
     PerformingTransactionState,
-    EjectingCardState
+    EjectingCardState,
+    OutOfCashState
 };
 
 class AtmState : public tinyfsm::MooreMachine<AtmState>
@@ -56,6 +59,8 @@ public:
     virtual void react(const TransactionChosen &event) { };
     virtual void react(const TransactionContinued &event) { };
     virtual void react(const TransactionFinished &event) { };
+    virtual void react(const OutOfCash &event) { };
+    virtual void react(const CashRefilled &event) { };
 
     virtual void entry(void) { };
     void exit(void) { };
@@ -88,59 +93,67 @@ class IdleState : public AtmState
 {
 public:
     StateEnum getState() const override;
-    virtual void react(const CardInserted &event) override;
+    void react(const CardInserted &event) override;
 };
 
 class ReadingCardState : public AtmState
 {
 public:
     StateEnum getState() const override;
-    virtual void react(const ErrorOccured &event) override;
-    virtual void react(const CardVerified &event) override;
+    void react(const ErrorOccured &event) override;
+    void react(const CardVerified &event) override;
 };
 
 class ReadingPinState : public AtmState
 {
 public:
     StateEnum getState() const override;
-    virtual void react(const Canceled &event) override;
-    virtual void react(const ErrorOccured &event) override;
-    virtual void react(const PinVerified &event) override;
+    void react(const Canceled &event) override;
+    void react(const ErrorOccured &event) override;
+    void react(const PinVerified &event) override;
 };
 
 class SelectingAccountState : public AtmState
 {
 public:
     StateEnum getState() const override;
-    virtual void react(const Canceled &event) override;
-    virtual void react(const ErrorOccured &event) override;
-    virtual void react(const AccountSelected &event) override;
+    void react(const Canceled &event) override;
+    void react(const ErrorOccured &event) override;
+    void react(const AccountSelected &event) override;
 };
 
 class ChoosingTransactionState : public AtmState
 {
 public:
     StateEnum getState() const override;
-    virtual void react(const Canceled &event) override;
-    virtual void react(const ErrorOccured &event) override;
-    virtual void react(const TransactionChosen &event) override;
+    void react(const Canceled &event) override;
+    void react(const ErrorOccured &event) override;
+    void react(const TransactionChosen &event) override;
 };
 
 class PerformingTransactionState : public AtmState
 {
 public:
     StateEnum getState() const override;
-    virtual void react(const Canceled &event) override;
-    virtual void react(const ErrorOccured &event) override;
-    virtual void react(const TransactionContinued &event) override;
-    virtual void react(const TransactionFinished &event) override;
+    void react(const Canceled &event) override;
+    void react(const ErrorOccured &event) override;
+    void react(const TransactionContinued &event) override;
+    void react(const TransactionFinished &event) override;
+    void react(const OutOfCash &event) override;
 };
 
 class EjectingCardState : public AtmState
 {
 public:
     StateEnum getState() const override;
-    virtual void react(const CardEjected &event) override;
+    void react(const CardEjected &event) override;
+};
+
+class OutOfCashState : public AtmState
+{
+public:
+    StateEnum getState() const override;
+    void react(const CashRefilled &event) override;
 };
 
 #endif  // ATM_STATE_H_
