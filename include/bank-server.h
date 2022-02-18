@@ -13,6 +13,15 @@ public:
 
     virtual OperationResult verifyCard(const CashCard &cashCard) = 0;
     virtual OperationResult verifyPinNumber(const CashCard &cashCard, const PinNumber &pinNumber) = 0;
+    virtual OperationResult selectAccount(
+        const CashCard &cashCard,
+        const PinNumber &pinNumber,
+        AccountType type,
+        AccountSession &session) = 0;
+
+    virtual OperationResult seeBalance(const AccountSession &session, AccountInfo &info) = 0;
+    virtual OperationResult wirhdraw(const AccountSession &session, unsigned int amount) = 0;
+    virtual OperationResult deposit(const AccountSession &session, unsigned int amount) = 0;
 };
 
 #endif  // BANK_SERVER_H_

@@ -42,6 +42,8 @@ void IdleState::react(const CardInserted &event)
 OperationResult IdleState::insertCard(const CashCard &cashCard)
 {
     cashCard_ = cashCard;
+    AtmState::dispatch(CardInserted());
+
     return OperationResult(ErrorCode::Ok, "");
 }
 
@@ -63,6 +65,18 @@ void ReadingCardState::react(const ErrorOccured &event)
 void ReadingCardState::react(const CardVerified &event)
 {
     transit<ReadingPinState>();
+}
+
+void ReadingCardState::entry()
+{
+    AtmState::entry();
+
+    const auto result = bankServer_->verifyCard(cashCard_);
+    if (result.getCode() == ErrorCode::Ok) {
+        AtmState::dispatch(CardVerified());
+    } else {
+        AtmState::dispatch(ErrorOccured(result));
+    }
 }
 
 AtmStateEnum ReadingPinState::getState() const

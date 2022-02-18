@@ -8,6 +8,9 @@ struct Initialized : tinyfsm::Event { };
 struct Canceled : tinyfsm::Event { };
 struct ErrorOccured : tinyfsm::Event
 {
+    ErrorOccured(const OperationResult result = OperationResult()) {
+        this->result = result;
+    }
     OperationResult result;
 };
 struct CardInserted : tinyfsm::Event { };

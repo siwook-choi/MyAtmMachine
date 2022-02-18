@@ -117,15 +117,29 @@ public:
     OperationResult insertCard(const CashCard &cashCard) override;
 };
 
-class ReadingCardState : public AtmState
+class HasCardState : public AtmState
+{
+public:
+    virtual AtmStateEnum getState() const = 0;
+    OperationResult ejectCard() override
+    {
+        cashCard_ = CashCard();
+        accountSession_ = AccountSession();
+        AtmState::dispatch(CardEjected());
+    }
+};
+
+class ReadingCardState : public HasCardState
 {
 public:
     AtmStateEnum getState() const override;
     void react(const ErrorOccured &event) override;
     void react(const CardVerified &event) override;
+
+    void entry() override;
 };
 
-class ReadingPinState : public AtmState
+class ReadingPinState : public HasCardState
 {
 public:
     AtmStateEnum getState() const override;
@@ -134,7 +148,7 @@ public:
     void react(const PinVerified &event) override;
 };
 
-class SelectingAccountState : public AtmState
+class SelectingAccountState : public HasCardState
 {
 public:
     AtmStateEnum getState() const override;
@@ -143,7 +157,7 @@ public:
     void react(const AccountSelected &event) override;
 };
 
-class ChoosingTransactionState : public AtmState
+class ChoosingTransactionState : public HasCardState
 {
 public:
     AtmStateEnum getState() const override;
@@ -152,7 +166,7 @@ public:
     void react(const TransactionChosen &event) override;
 };
 
-class PerformingTransactionState : public AtmState
+class PerformingTransactionState : public HasCardState
 {
 public:
     AtmStateEnum getState() const override;
@@ -162,7 +176,7 @@ public:
     void react(const TransactionFinished &event) override;
 };
 
-class EjectingCardState : public AtmState
+class EjectingCardState : public HasCardState
 {
 public:
     AtmStateEnum getState() const override;
