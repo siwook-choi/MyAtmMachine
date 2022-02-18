@@ -7,7 +7,6 @@
 #include "cash-bin.h"
 #include "card-reader.h"
 
-#include "cash-card.h"
 #include "pin-number.h"
 #include "account.h"
 #include "operation-result.h"
