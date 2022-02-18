@@ -1,22 +1,29 @@
 # MyAtmMachine
-My automated teller machine (ATM) controller, implemented by finite state machine (FSM) pattern.
+My automated teller machine (ATM) controller, implemented using finite state machine (FSM).
 
 ## Environment
 Tested on below environment
 ```
 OS: Ubuntu 20.04
 Compiler: gcc 9.3.0
+cmake version 3.16.3
 ```
 
-## Build
-```
-$ git clone https://github.com/tldnr514/MyAtmMachine.git
-$ cd MyAtmMachine
-$ git submodule update --init --recursive
-$ mkdir build
-$ cd $_
-$ cmake ..
-$ make
+## Build and Test
+```bash
+# Clone project and init submodules
+git clone https://github.com/tldnr514/MyAtmMachine.git
+cd MyAtmMachine
+git submodule update --init --recursive
+
+# Build library and tests
+mkdir build
+cd $_
+cmake ..
+make
+
+# Execute test
+./my_atm_machine_test
 ```
 
 ## Atm States
