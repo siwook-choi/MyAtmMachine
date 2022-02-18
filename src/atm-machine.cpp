@@ -11,7 +11,13 @@ OperationResult AtmMachine::initialize(
     std::shared_ptr<CashBin> cashBin,
     std::shared_ptr<CardReader> cardReader)
 {
+    AtmState::start();
     return AtmState::current_state_ptr->initialize(bankServer, cashBin, cardReader);
+}
+
+OperationResult AtmMachine::release()
+{
+    return AtmState::current_state_ptr->release();
 }
 
 OperationResult AtmMachine::enterPin(const PinNumber &pinNumber)

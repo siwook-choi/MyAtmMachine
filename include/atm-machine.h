@@ -18,12 +18,6 @@ class AtmMachine
 {
 public:
     AtmMachine() = default;
-
-    /**
-     * @brief Get the State of ATM machine.
-     * @return AtmStateEnum 
-     */
-    static AtmStateEnum getState();
     
     /**
      * @brief Initialize ATM machine.
@@ -37,6 +31,14 @@ public:
         std::shared_ptr<BankServer> bankServer,
         std::shared_ptr<CashBin> cashBin,
         std::shared_ptr<CardReader> cardReader);
+
+    static OperationResult release();
+
+    /**
+     * @brief Get the State of ATM machine.
+     * @return AtmStateEnum 
+     */
+    static AtmStateEnum getState();
 
     /**
      * @brief Enter PIN number.

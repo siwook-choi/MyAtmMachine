@@ -6,6 +6,7 @@
 
 class MockCardReader : public CardReader
 {
+public:
     MOCK_METHOD(bool, hasCard, (), (override));
     MOCK_METHOD(OperationResult, readCard, (CashCard &), (override));
     MOCK_METHOD(OperationResult, ejectCard, (), (override));

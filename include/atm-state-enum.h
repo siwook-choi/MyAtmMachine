@@ -4,10 +4,11 @@
 // refs: https://www.geeksforgeeks.org/state-transition-diagram-for-an-atm-system/
 enum class AtmStateEnum
 {
+    UndefinedState,
     InitializingState,
     IdleState,
     ReadingCardState,
-    ReadingPinState,
+    AuthenticatingState,
     SelectingAccountState,
     ChoosingTransactionState,
     PerformingTransactionState,

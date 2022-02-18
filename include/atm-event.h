@@ -14,9 +14,9 @@ struct ErrorOccured : tinyfsm::Event
     OperationResult result;
 };
 struct CardInserted : tinyfsm::Event { };
+struct CardRead : tinyfsm::Event { };
 struct CardPulledOut : tinyfsm::Event { };
-struct CardVerified : tinyfsm::Event { };
-struct PinVerified : tinyfsm::Event { };
+struct Authenticated : tinyfsm::Event { };
 struct AccountSelected : tinyfsm::Event { };
 struct TransactionChosen : tinyfsm::Event { };
 struct TransactionContinued : tinyfsm::Event { };

@@ -11,6 +11,20 @@ CashCard AtmState::cashCard_ = CashCard();
 PinNumber AtmState::pinNumber_ = PinNumber();
 AccountSession AtmState::accountSession_ = AccountSession();
 
+OperationResult AtmState::release()
+{
+    stateCallback_ = [](AtmStateEnum){};
+    bankServer_= nullptr;
+    cashBin_ = nullptr;
+    cardReader_ = nullptr;
+    cashCard_ = CashCard();
+    pinNumber_ = PinNumber();
+    accountSession_ = AccountSession();
+    AtmState::set_initial_state();
+
+    return OperationResult(ErrorCode::Ok, "");
+}
+
 AtmStateEnum InitializingState::getState() const
 {
     return AtmStateEnum::InitializingState;
@@ -29,7 +43,7 @@ OperationResult InitializingState::initialize(
     bankServer_ = bankServer;
     cashBin_ = cashBin;
     cardReader_ = cardReader;
-    AtmState::dispatch(Initialized());
+    dispatch(Initialized());
     return OperationResult(ErrorCode::Ok, "");
 }
 
@@ -46,7 +60,8 @@ void IdleState::react(const ErrorOccured &event)
 
 void IdleState::react(const CardInserted &event)
 {
-    transit<ReadingCardState>();
+    if (cardReader_->hasCard())
+        transit<ReadingCardState>();
 }
 
 AtmStateEnum ReadingCardState::getState() const
@@ -63,43 +78,34 @@ void ReadingCardState::react(const ErrorOccured &event)
     }
 }
 
-void ReadingCardState::react(const CardVerified &event)
+void ReadingCardState::react(const CardRead &event)
 {
-    transit<ReadingPinState>();
+    transit<AuthenticatingState>();
 }
 
 void ReadingCardState::entry()
 {
-    AtmState::entry();
-    
     CashCard cashCard;
-    const auto readCardResult = cardReader_->readCard(cashCard);
-    if (!readCardResult.isSucceed()) {
-        AtmState::dispatch(ErrorOccured(readCardResult));
-        return;
-    }
+    const auto result = cardReader_->readCard(cashCard);
 
-    const auto verifyCardResult = bankServer_->verifyCard(cashCard);
-    if (!verifyCardResult.isSucceed()) {
-        AtmState::dispatch(ErrorOccured(verifyCardResult));
-        return;
+    if (result.isSucceed()) {
+        dispatch(CardRead());
+    } else {
+        dispatch(ErrorOccured(result));
     }
-
-    cashCard_ = cashCard;
-    AtmState::dispatch(CardVerified());
 }
 
-AtmStateEnum ReadingPinState::getState() const
+AtmStateEnum AuthenticatingState::getState() const
 {
-    return AtmStateEnum::ReadingPinState;
+    return AtmStateEnum::AuthenticatingState;
 }
 
-void ReadingPinState::react(const Canceled &event)
+void AuthenticatingState::react(const Canceled &event)
 {
     transit<EjectingCardState>();
 }
 
-void ReadingPinState::react(const ErrorOccured &event)
+void AuthenticatingState::react(const ErrorOccured &event)
 {
     if (event.result.isFatal()) {
         transit<OutOfOrderState>();
@@ -108,20 +114,20 @@ void ReadingPinState::react(const ErrorOccured &event)
     }
 }
 
-void ReadingPinState::react(const PinVerified &event)
+void AuthenticatingState::react(const Authenticated &event)
 {
     transit<SelectingAccountState>();
 }
 
-OperationResult ReadingPinState::enterPin(const PinNumber &pinNumber)
+OperationResult AuthenticatingState::enterPin(const PinNumber &pinNumber)
 {
-    const auto result = bankServer_->verifyPinNumber(cashCard_, pinNumber);
+    const auto result = bankServer_->authenticate(cashCard_, pinNumber);
     
     if (result.isSucceed()) {
         pinNumber_ = pinNumber;
-        AtmState::dispatch(PinVerified());
+        dispatch(Authenticated());
     } else {
-        AtmState::dispatch(ErrorOccured(result));
+        dispatch(ErrorOccured(result));
     }
     
     return result;
@@ -158,9 +164,9 @@ OperationResult SelectingAccountState::selectAccount(AccountType accountType)
 
     if (result.isSucceed()) {
         accountSession_ = accountSession;
-        AtmState::dispatch(AccountSelected());
+        dispatch(AccountSelected());
     } else {
-        AtmState::dispatch(ErrorOccured(result));
+        dispatch(ErrorOccured(result));
     }
 
     return result;

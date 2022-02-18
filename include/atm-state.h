@@ -35,9 +35,9 @@ public:
     virtual void react(const Canceled &event) { };
     virtual void react(const ErrorOccured &event) { };
     virtual void react(const CardInserted &event) { };
+    virtual void react(const CardRead &event) { };
     virtual void react(const CardPulledOut &event) { };
-    virtual void react(const CardVerified &event) { };
-    virtual void react(const PinVerified &event) { };
+    virtual void react(const Authenticated &event) { };
     virtual void react(const AccountSelected &event) { };
     virtual void react(const TransactionChosen &event) { };
     virtual void react(const TransactionContinued &event) { };
@@ -78,6 +78,8 @@ public:
         return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
     }
 
+    virtual OperationResult release();
+
     static void setStateCallback(std::function<void(AtmStateEnum)> stateCallback)
     {
         stateCallback_ = stateCallback;
@@ -117,18 +119,18 @@ class ReadingCardState : public AtmState
 public:
     AtmStateEnum getState() const override;
     void react(const ErrorOccured &event) override;
-    void react(const CardVerified &event) override;
+    void react(const CardRead &event) override;
 
     void entry() override;
 };
 
-class ReadingPinState : public AtmState
+class AuthenticatingState : public AtmState
 {
 public:
     AtmStateEnum getState() const override;
     void react(const Canceled &event) override;
     void react(const ErrorOccured &event) override;
-    void react(const PinVerified &event) override;
+    void react(const Authenticated &event) override;
 
     OperationResult enterPin(const PinNumber &pinNumber);
 };
