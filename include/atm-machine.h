@@ -23,7 +23,7 @@ BEGIN_ATM_MACHINE
 class AtmMachine
 {
 public:
-    AtmMachine() = default;
+    AtmMachine() = delete;
     
     /**
      * @brief Initialize ATM machine.
@@ -38,6 +38,10 @@ public:
         std::shared_ptr<CashBin> cashBin,
         std::shared_ptr<CardReader> cardReader);
 
+    /**
+     * @brief Release resources and set AtmState to InitializingState.
+     * @return OperationResult 
+     */
     static OperationResult release();
 
     /**
@@ -80,7 +84,7 @@ public:
     /**
      * @brief Withdraw cash from current account.
      * Available when ATM is in ChoosingTransactionState.
-     * @param amount 
+     * @param amount Amount of money to withdraw
      * @return OperationResult 
      */
     static OperationResult withdraw(unsigned int amount);
@@ -94,7 +98,7 @@ public:
     
     /**
      * @brief Set the callback function for state change.
-     * @param stateCallback
+     * @param stateCallback Callback function called when AtmState changes.
      */
     static void setStateCallback(std::function<void(AtmStateEnum)> stateCallback);
 };
