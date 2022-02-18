@@ -11,7 +11,7 @@ public:
     virtual ~CardReader() = default;
 
     virtual bool hasCard() = 0;
-    virtual OperationResult readCard(CashCard &cashCard) const = 0;
+    virtual OperationResult readCard(CashCard &cashCard) = 0;
     virtual OperationResult ejectCard() = 0;
 };
 

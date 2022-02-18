@@ -34,6 +34,6 @@ TEST(TestAtmState, TestAtmWithdrawlState)
     AtmState::dispatch(TransactionFinished());
     EXPECT_TRUE(AtmState::is_in_state<EjectingCardState>());
 
-    AtmState::dispatch(CardEjected());
+    AtmState::dispatch(CardPulledOut());
     EXPECT_TRUE(AtmState::is_in_state<IdleState>());
 }

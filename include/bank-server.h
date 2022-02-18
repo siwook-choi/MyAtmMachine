@@ -3,6 +3,7 @@
 
 #include "cash-card.h"
 #include "pin-number.h"
+#include "account.h"
 #include "operation-result.h"
 
 class BankServer

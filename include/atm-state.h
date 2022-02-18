@@ -6,10 +6,12 @@
 #include "operation-result.h"
 #include "cash-card.h"
 #include "pin-number.h"
-#include "cash-bin.h"
 #include "account.h"
-#include "bank-server.h"
 #include "atm-state-enum.h"
+#include "bank-server.h"
+#include "cash-bin.h"
+#include "card-reader.h"
+
 
 #include <functional>
 #include <memory>
@@ -138,6 +140,8 @@ public:
     void react(const Canceled &event) override;
     void react(const ErrorOccured &event) override;
     void react(const AccountSelected &event) override;
+
+    OperationResult selectAccount(AccountType accountType);
 };
 
 class ChoosingTransactionState : public AtmState
