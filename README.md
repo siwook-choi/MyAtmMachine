@@ -20,7 +20,7 @@ $ make
 ```
 
 ## Atm States
-States of my ATM machine are as follow.  
+State Diagram of my ATM machine is as follow.  
 ![AtmState](figures/AtmState.png)
 
 ### Initializing

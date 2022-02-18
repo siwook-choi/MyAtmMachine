@@ -14,6 +14,9 @@
 #include <functional>
 #include <memory>
 
+/**
+ * @brief AtmMachine is a controller for a ATM machine.
+ */
 class AtmMachine
 {
 public:
@@ -42,7 +45,7 @@ public:
 
     /**
      * @brief Enter PIN number.
-     * Only available when ATM is in ReadingPinState.
+     * Available when ATM is in ReadingPinState.
      * @param pinNumber PIN number instance.
      * @return OperationResult 
      */
@@ -50,23 +53,47 @@ public:
 
     /**
      * @brief Select account type.
-     * Only available when ATM is in SelectingAccountState.
+     * Available when ATM is in SelectingAccountState.
      * @param accountType Type of account.
      * @return OperationResult 
      */
     static OperationResult selectAccount(AccountType accountType);
 
+    /**
+     * @brief See balance of current account.
+     * Available when ATM is in ChoosingTransactionState.
+     * @param[out] accountInfo Information of current account. 
+     * @return OperationResult 
+     */
     static OperationResult seeBalance(AccountInfo &accountInfo);
+
+    /**
+     * @brief Deposit cash to current account.
+     * Available when ATM is in ChoosingTransactionState.
+     * @param amount 
+     * @return OperationResult 
+     */
     static OperationResult deposit(unsigned int amount);
+
+    /**
+     * @brief Withdraw cash from current account.
+     * Available when ATM is in ChoosingTransactionState.
+     * @param amount 
+     * @return OperationResult 
+     */
     static OperationResult withdraw(unsigned int amount);
 
     /**
      * @brief Cancel current operation.
-     * 
+     * Available when ATM is in AuthenticatingState, SelectingAccountState, and ChoosingTransactionState.
      * @return OperationResult 
      */
     static OperationResult cancel();
     
+    /**
+     * @brief Set the callback function for state change.
+     * @param stateCallback
+     */
     static void setStateCallback(std::function<void(AtmStateEnum)> stateCallback);
 };
 

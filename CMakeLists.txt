@@ -3,11 +3,6 @@ project(my_atm_machine LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories(
-    include
-    extern/tinyfsm/include
-)
-
 set(SOURCES
     src/account.cpp
     src/atm-machine.cpp
@@ -20,6 +15,15 @@ set(SOURCES
 add_library(
     ${PROJECT_NAME}_lib
     ${SOURCES}
+)
+
+target_include_directories(
+    ${PROJECT_NAME}_lib
+    PUBLIC
+    include
+
+    PRIVATE
+    extern/tinyfsm/include
 )
 
 enable_testing()
@@ -35,6 +39,13 @@ if(CMAKE_TESTING_ENABLED)
 
     add_executable(${PROJECT_NAME}_test
         ${TEST_SOURCES})
+
+    target_include_directories(
+        ${PROJECT_NAME}_test
+        PRIVATE
+        src
+        extern/tinyfsm/include
+    )
 
     target_link_libraries(
         ${PROJECT_NAME}_test
