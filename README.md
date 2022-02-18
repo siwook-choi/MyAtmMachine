@@ -5,28 +5,33 @@ My automated teller machine (ATM) controller, implemented by finite state machin
 States of my ATM machine are as follow.  
 ![AtmState](figures/AtmState.png)
 
+### Initializing
+ATM need initialization.  
+Available Actions:
+* Initialize
+
 ### Idle
 Idle state with an empty card reader.  
-Available Actions
+Available Actions:
 * Insert Card
 ### Reading Card
 ATM is currently reading and verifying inserted card.
 
 ### Reading Pin
 User have to enter PIN to proceed.  
-Available Actions
+Available Actions:
 * Enter PIN
 * Cancel
 
 ### Selecting Account
 User have to select an account to proceed.  
-Available Actions
+Available Actions:
 * Select Account
 * Cancel
 
 ### Choosing Transaction
 User can start the transaction.  
-Available Actions
+Available Actions:
 * See Balance
 * Withdraw
 * Deposit
@@ -37,7 +42,7 @@ ATM is performing Transaction
 
 ### Ejecting Card
 ATM is ejecting card.  
-Available Actions
+Available Actions:
 * Eject card
 
 ### Out of Cash

@@ -7,33 +7,29 @@
 #include "cash-card.h"
 #include "pin-number.h"
 #include "cash-bin.h"
-#include "account.h"
+#include "account-info.h"
+#include "bank-server.h"
+#include "atm-state-enum.h"
 
+#include <functional>
+#include <memory>
 #include <stdexcept>
-
-
-// refs: https://www.geeksforgeeks.org/state-transition-diagram-for-an-atm-system/
-enum class StateEnum
-{
-    IdleState,
-    ReadingCardState,
-    ReadingPinState,
-    SelectingAccountState,
-    ChoosingTransactionState,
-    PerformingTransactionState,
-    EjectingCardState,
-    OutOfCashState
-};
 
 class AtmState : public tinyfsm::MooreMachine<AtmState>
 {
 public:
-    virtual StateEnum getState() const = 0;
+    virtual AtmStateEnum getState() const = 0;
+
+    virtual void entry()
+    {
+        stateCallback_(getState());
+    }
 
     void react(const tinyfsm::Event &event) {
         throw std::runtime_error("Unhandled event in AtmState");
     };
 
+    virtual void react(const Initialized &event) { };
     virtual void react(const Canceled &event) { };
     virtual void react(const ErrorOccured &event) { };
     virtual void react(const CardInserted &event) { };
@@ -46,44 +42,84 @@ public:
     virtual void react(const TransactionFinished &event) { };
     virtual void react(const CashRefilled &event) { };
 
-    virtual void entry(void) { };
-    void exit(void) { };
-
-    virtual OperationResult insertCard(const CashCard &card) {
-        return OperationResult(OperationResult::ErrorCode::InvalidOperation, "Invalid Operation");
-    }
-    virtual OperationResult ejectCard() {
-        return OperationResult(OperationResult::ErrorCode::InvalidOperation, "Invalid Operation");
-    }
-    virtual OperationResult authenticate(const PinNumber &pin) {
-        return OperationResult(OperationResult::ErrorCode::InvalidOperation, "Invalid Operation");
-    }
-    virtual OperationResult selectAccount(AccountType type) {
-        return OperationResult(OperationResult::ErrorCode::InvalidOperation, "Invalid Operation");
+    virtual OperationResult initialize(
+        std::shared_ptr<BankServer> bankServer,
+        std::shared_ptr<CashBin> cashBin)
+    {
+        return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
     }
 
-    virtual OperationResult seeBalance() {
-        return OperationResult(OperationResult::ErrorCode::InvalidOperation, "Invalid Operation");
+    virtual OperationResult insertCard(const CashCard &cashCard)
+    {
+        return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
     }
-    virtual OperationResult deposit(unsigned int amount) {
-        return OperationResult(OperationResult::ErrorCode::InvalidOperation, "Invalid Operation");
+
+    virtual OperationResult ejectCard()
+    {
+        return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
     }
-    virtual OperationResult withdraw(unsigned int amount) {
-        return OperationResult(OperationResult::ErrorCode::InvalidOperation, "Invalid Operation");
+
+    virtual OperationResult enterPin(const PinNumber &pinNumber)
+    {
+        return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
     }
+
+    virtual OperationResult selectAccount(AccountType accountType)
+    {
+        return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
+    }
+
+    virtual OperationResult seeBalance()
+    {
+        return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
+    }
+
+    virtual OperationResult deposit(unsigned int amount)
+    {
+        return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
+    }
+
+    virtual OperationResult withdraw(unsigned int amount)
+    {
+        return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
+    }
+
+    static void setStateCallback(std::function<void(AtmStateEnum)> stateCallback)
+    {
+        stateCallback_ = stateCallback;
+    }
+
+protected:
+    static std::function<void(AtmStateEnum)> stateCallback_;
+    static std::shared_ptr<BankServer> bankServer_;
+    static std::shared_ptr<CashBin> cashBin_;
+    static CashCard cashCard_;
+    static AccountInfo accountInfo;
+};
+
+class InitializingState : public AtmState
+{
+    AtmStateEnum getState() const override;
+    void react(const Initialized &event) override;
+
+    OperationResult initialize(
+        std::shared_ptr<BankServer> bankServer,
+        std::shared_ptr<CashBin> cashBin) override;
 };
 
 class IdleState : public AtmState
 {
 public:
-    StateEnum getState() const override;
+    AtmStateEnum getState() const override;
     void react(const CardInserted &event) override;
+
+    OperationResult insertCard(const CashCard &cashCard) override;
 };
 
 class ReadingCardState : public AtmState
 {
 public:
-    StateEnum getState() const override;
+    AtmStateEnum getState() const override;
     void react(const ErrorOccured &event) override;
     void react(const CardVerified &event) override;
 };
@@ -91,7 +127,7 @@ public:
 class ReadingPinState : public AtmState
 {
 public:
-    StateEnum getState() const override;
+    AtmStateEnum getState() const override;
     void react(const Canceled &event) override;
     void react(const ErrorOccured &event) override;
     void react(const PinVerified &event) override;
@@ -100,7 +136,7 @@ public:
 class SelectingAccountState : public AtmState
 {
 public:
-    StateEnum getState() const override;
+    AtmStateEnum getState() const override;
     void react(const Canceled &event) override;
     void react(const ErrorOccured &event) override;
     void react(const AccountSelected &event) override;
@@ -109,7 +145,7 @@ public:
 class ChoosingTransactionState : public AtmState
 {
 public:
-    StateEnum getState() const override;
+    AtmStateEnum getState() const override;
     void react(const Canceled &event) override;
     void react(const ErrorOccured &event) override;
     void react(const TransactionChosen &event) override;
@@ -118,7 +154,7 @@ public:
 class PerformingTransactionState : public AtmState
 {
 public:
-    StateEnum getState() const override;
+    AtmStateEnum getState() const override;
     void react(const Canceled &event) override;
     void react(const ErrorOccured &event) override;
     void react(const TransactionContinued &event) override;
@@ -128,15 +164,21 @@ public:
 class EjectingCardState : public AtmState
 {
 public:
-    StateEnum getState() const override;
+    AtmStateEnum getState() const override;
     void react(const CardEjected &event) override;
 };
 
 class OutOfCashState : public AtmState
 {
 public:
-    StateEnum getState() const override;
+    AtmStateEnum getState() const override;
     void react(const CashRefilled &event) override;
+};
+
+class OutOfOrderState : public AtmState
+{
+public:
+    AtmStateEnum getState() const override;
 };
 
 #endif  // ATM_STATE_H_

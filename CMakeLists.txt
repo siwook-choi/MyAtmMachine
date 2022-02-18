@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(my_atm_model LANGUAGES CXX)
+project(my_atm_machine LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -9,6 +9,7 @@ include_directories(
 )
 
 set(SOURCES
+    src/account-info.cpp
     src/atm-machine.cpp
     src/atm-state.cpp
     src/cash-card.cpp

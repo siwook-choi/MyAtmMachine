@@ -4,6 +4,7 @@
 #include <tinyfsm.hpp>
 #include <operation-result.h>
 
+struct Initialized : tinyfsm::Event { };
 struct Canceled : tinyfsm::Event { };
 struct ErrorOccured : tinyfsm::Event
 {

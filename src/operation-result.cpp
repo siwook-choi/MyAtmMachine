@@ -11,7 +11,15 @@ bool OperationResult::isSucceed() const
     return code_ == ErrorCode::Ok;
 }
 
-OperationResult::ErrorCode OperationResult::getCode() const
+bool OperationResult::isFatal() const
+{
+    if (code_ == ErrorCode::CashBinFailure || code_ == ErrorCode::UnknownError)
+        return true;
+
+    return false;
+}
+
+ErrorCode OperationResult::getCode() const
 {
     return code_;
 }

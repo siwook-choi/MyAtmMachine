@@ -5,6 +5,9 @@
 TEST(TestAtmState, TestAtmWithdrawlState)
 {
     AtmState::start();
+    EXPECT_TRUE(AtmState::is_in_state<InitializingState>());
+
+    AtmState::dispatch(Initialized());
     EXPECT_TRUE(AtmState::is_in_state<IdleState>());
 
     AtmState::dispatch(CardInserted());

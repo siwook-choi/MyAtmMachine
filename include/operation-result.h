@@ -3,20 +3,24 @@
 
 #include <string>
 
+enum class ErrorCode
+{
+    Ok=0,
+    InvalidOperation,
+    TransactionFailed,
+    AuthenticationFailed,
+    OutOfCash,
+    CashBinFailure,
+    UnknownError
+};
+
 class OperationResult
 {
 public:
-    enum class ErrorCode
-    {
-        Ok=0,
-        InvalidOperation,
-        TransactionFailed,
-        OutOfCash,
-        AuthenticationFailed
-    };
     explicit OperationResult(ErrorCode code = ErrorCode::Ok, const std::string &message = "");
 
     bool isSucceed() const;
+    bool isFatal() const;
     ErrorCode getCode() const;
     const std::string &getMessage() const;
 
