@@ -1,6 +1,24 @@
 # MyAtmMachine
 My automated teller machine (ATM) controller, implemented by finite state machine (FSM) pattern.
 
+## Environment
+Tested on below environment
+```
+OS: Ubuntu 20.04
+Compiler: gcc 9.3.0
+```
+
+## Build
+```
+$ git clone https://github.com/tldnr514/MyAtmMachine.git
+$ cd MyAtmMachine
+$ git submodule update --init --recursive
+$ mkdir build
+$ cd $_
+$ cmake ..
+$ make
+```
+
 ## Atm States
 States of my ATM machine are as follow.  
 ![AtmState](figures/AtmState.png)
@@ -14,8 +32,9 @@ Available Actions:
 Idle state with an empty card reader.  
 Available Actions:
 * Insert Card
+  
 ### Reading Card
-ATM is currently reading and verifying inserted card.
+ATM is reading inserted card.
 
 ### Reading Pin
 User have to enter PIN to proceed.  

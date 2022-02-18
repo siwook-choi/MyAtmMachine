@@ -208,6 +208,76 @@ void ChoosingTransactionState::react(const TransactionChosen &event)
     transit<PerformingTransactionState>();
 }
 
+OperationResult ChoosingTransactionState::seeBalance(AccountInfo &accountInfo)
+{
+    dispatch(TransactionChosen());
+    const auto result = bankServer_->seeBalance(accountSession_, accountInfo);
+
+    if (result.isSucceed()) {
+        dispatch(TransactionFinished());
+    } else {
+        dispatch(ErrorOccured(result));
+    }
+
+    return result;
+}
+
+OperationResult ChoosingTransactionState::deposit(unsigned int amount)
+{
+    dispatch(TransactionChosen());
+    const auto result = bankServer_->deposit(accountSession_, amount);
+
+    if (result.isSucceed()) {
+        dispatch(TransactionFinished());
+    } else {
+        dispatch(ErrorOccured(result));
+    }
+
+    return result;
+}
+
+OperationResult ChoosingTransactionState::withdraw(unsigned int amount)
+{
+    dispatch(TransactionChosen());
+    
+    {
+        const auto result = checkCashBinAmount(amount);
+        if (!result.isSucceed()) {
+            dispatch(ErrorOccured(result));
+            return result;
+        }
+    }
+
+    {
+        const auto result = bankServer_->withdraw(accountSession_, amount);
+        if (!result.isSucceed()) {
+            dispatch(ErrorOccured(result));
+            return result;
+        }
+    }
+
+    {
+        const auto result = cashBin_->dispenseCash(amount);
+        if (!result.isSucceed()) {
+            dispatch(ErrorOccured(result));
+            return result;
+        }
+    }
+    
+    dispatch(TransactionFinished());
+    return OperationResult(ErrorCode::Ok, "");
+}
+
+OperationResult ChoosingTransactionState::checkCashBinAmount(unsigned int amount)
+{
+    OperationResult result(ErrorCode::Ok, "");
+    if (cashBin_->getAmountCash() < amount) {
+        result = OperationResult(ErrorCode::OutOfCash, "Not enough cash");
+    }
+
+    return result;
+}
+
 OperationResult ChoosingTransactionState::cancel()
 {
     dispatch(Canceled());
@@ -235,14 +305,9 @@ void PerformingTransactionState::react(const ErrorOccured &event)
     }
 }
 
-void PerformingTransactionState::react(const TransactionContinued &event)
-{
-    transit<ChoosingTransactionState>();
-}
-
 void PerformingTransactionState::react(const TransactionFinished &event)
 {
-    transit<EjectingCardState>();
+    transit<ChoosingTransactionState>();
 }
 
 AtmStateEnum EjectingCardState::getState() const

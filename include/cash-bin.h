@@ -10,7 +10,7 @@ public:
     virtual void setAmountCash(unsigned int amount) = 0;
     virtual unsigned int getAmountCash() = 0;
 
-    virtual OperationResult withdrawCash(unsigned int amount) = 0;
+    virtual OperationResult dispenseCash(unsigned int amount) = 0;
 };
 
 #endif // CASH_BIN_H_

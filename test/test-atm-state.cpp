@@ -40,13 +40,10 @@ TEST(TestAtmState, TestAtmState)
     AtmState::dispatch(TransactionChosen());
     EXPECT_TRUE(AtmState::is_in_state<PerformingTransactionState>());
 
-    AtmState::dispatch(TransactionContinued());
+    AtmState::dispatch(TransactionFinished());
     EXPECT_TRUE(AtmState::is_in_state<ChoosingTransactionState>());
 
-    AtmState::dispatch(TransactionChosen());
-    EXPECT_TRUE(AtmState::is_in_state<PerformingTransactionState>());
-
-    AtmState::dispatch(TransactionFinished());
+    AtmState::dispatch(Canceled());
     EXPECT_TRUE(AtmState::is_in_state<EjectingCardState>());
 
     AtmState::dispatch(CardPulledOut());

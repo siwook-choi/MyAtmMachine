@@ -40,7 +40,6 @@ public:
     virtual void react(const Authenticated &event) { };
     virtual void react(const AccountSelected &event) { };
     virtual void react(const TransactionChosen &event) { };
-    virtual void react(const TransactionContinued &event) { };
     virtual void react(const TransactionFinished &event) { };
     virtual void react(const CashRefilled &event) { };
 
@@ -161,7 +160,13 @@ public:
     void react(const ErrorOccured &event) override;
     void react(const TransactionChosen &event) override;
     
+    OperationResult seeBalance(AccountInfo &accountInfo) override;
+    OperationResult deposit(unsigned int amount) override;
+    OperationResult withdraw(unsigned int amount) override;
     OperationResult cancel() override;
+
+private:
+    OperationResult checkCashBinAmount(unsigned int amount);
 };
 
 class PerformingTransactionState : public AtmState
@@ -170,7 +175,6 @@ public:
     AtmStateEnum getState() const override;
     void react(const Canceled &event) override;
     void react(const ErrorOccured &event) override;
-    void react(const TransactionContinued &event) override;
     void react(const TransactionFinished &event) override;
 };
 

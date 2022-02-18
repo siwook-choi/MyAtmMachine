@@ -19,7 +19,6 @@ struct CardPulledOut : tinyfsm::Event { };
 struct Authenticated : tinyfsm::Event { };
 struct AccountSelected : tinyfsm::Event { };
 struct TransactionChosen : tinyfsm::Event { };
-struct TransactionContinued : tinyfsm::Event { };
 struct TransactionFinished : tinyfsm::Event { };
 struct CashRefilled : tinyfsm::Event { };
 

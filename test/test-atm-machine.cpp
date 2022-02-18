@@ -27,7 +27,7 @@ TEST(TestAtmMachine, TestAtmWithdrawal)
     EXPECT_CALL((*bankServer), withdraw(_,AmountMoney))
         .Times(1)
         .WillRepeatedly(Return(OperationResult()));
-    EXPECT_CALL((*cashBin), withdrawCash(AmountMoney))
+    EXPECT_CALL((*cashBin), dispenseCash(AmountMoney))
         .Times(1)
         .WillRepeatedly(Return(OperationResult()));
     EXPECT_CALL((*cashBin), getAmountCash())
