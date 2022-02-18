@@ -42,8 +42,9 @@ ATM is performing Transaction
 
 ### Ejecting Card
 ATM is ejecting card.  
-Available Actions:
-* Eject card
 
 ### Out of Cash
 ATM is out of cash.
+
+### Out of Order
+ATM is out of order.

@@ -12,7 +12,7 @@ public:
     const std::string &toString() const;
 
 private:
-    const std::string pin_;
+    std::string pin_;
 };
 
 #endif  // PIN_H_

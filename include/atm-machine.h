@@ -1,10 +1,12 @@
 #ifndef ATM_MACHINE_H_
 #define ATM_MACHINE_H_
 
-#include "cash-card.h"
-#include "pin-number.h"
 #include "bank-server.h"
 #include "cash-bin.h"
+#include "card-reader.h"
+
+#include "cash-card.h"
+#include "pin-number.h"
 #include "account.h"
 #include "operation-result.h"
 #include "atm-state-enum.h"
@@ -28,24 +30,13 @@ public:
      * Only available when ATM is in InitializingState.
      * @param bankServer Pointer to BankServer
      * @param cashBin Pointer to CashBin
+     * @param cardReader Pointer to CardReader
      * @return OperationResult 
      */
-    static OperationResult initialize(std::shared_ptr<BankServer> bankServer, std::shared_ptr<CashBin> cashBin);
-
-    /**
-     * @brief Insert card to ATM.
-     * Only available when ATM is in IdleState.
-     * @param cashCard Cash card instance.
-     * @return OperationResult 
-     */
-    static OperationResult insertCard(const CashCard &cashCard);
-
-    /**
-     * @brief Eject card from ATM.
-     * Only available when ATM is in EjectingCardState.
-     * @return OperationResult 
-     */
-    static OperationResult ejectCard();
+    static OperationResult initialize(
+        std::shared_ptr<BankServer> bankServer,
+        std::shared_ptr<CashBin> cashBin,
+        std::shared_ptr<CardReader> cardReader);
 
     /**
      * @brief Enter PIN number.

@@ -6,19 +6,12 @@ AtmStateEnum AtmMachine::getState()
     return AtmState::current_state_ptr->getState();
 }
 
-OperationResult AtmMachine::initialize(std::shared_ptr<BankServer> bankServer, std::shared_ptr<CashBin> cashBin)
+OperationResult AtmMachine::initialize(
+    std::shared_ptr<BankServer> bankServer,
+    std::shared_ptr<CashBin> cashBin,
+    std::shared_ptr<CardReader> cardReader)
 {
-    return AtmState::current_state_ptr->initialize(bankServer, cashBin);
-}
-
-OperationResult AtmMachine::insertCard(const CashCard &cashCard)
-{
-    return AtmState::current_state_ptr->insertCard(cashCard);
-}
-
-OperationResult AtmMachine::ejectCard()
-{
-    return AtmState::current_state_ptr->ejectCard();
+    return AtmState::current_state_ptr->initialize(bankServer, cashBin, cardReader);
 }
 
 OperationResult AtmMachine::enterPin(const PinNumber &pinNumber)

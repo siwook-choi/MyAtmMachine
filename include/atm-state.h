@@ -33,7 +33,7 @@ public:
     virtual void react(const Canceled &event) { };
     virtual void react(const ErrorOccured &event) { };
     virtual void react(const CardInserted &event) { };
-    virtual void react(const CardEjected &event) { };
+    virtual void react(const CardPulledOut &event) { };
     virtual void react(const CardVerified &event) { };
     virtual void react(const PinVerified &event) { };
     virtual void react(const AccountSelected &event) { };
@@ -44,17 +44,8 @@ public:
 
     virtual OperationResult initialize(
         std::shared_ptr<BankServer> bankServer,
-        std::shared_ptr<CashBin> cashBin)
-    {
-        return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
-    }
-
-    virtual OperationResult insertCard(const CashCard &cashCard)
-    {
-        return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
-    }
-
-    virtual OperationResult ejectCard()
+        std::shared_ptr<CashBin> cashBin,
+        std::shared_ptr<CardReader> cardReader)
     {
         return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
     }
@@ -94,7 +85,9 @@ protected:
     static std::function<void(AtmStateEnum)> stateCallback_;
     static std::shared_ptr<BankServer> bankServer_;
     static std::shared_ptr<CashBin> cashBin_;
+    static std::shared_ptr<CardReader> cardReader_;
     static CashCard cashCard_;
+    static PinNumber pinNumber_;
     static AccountSession accountSession_;
 };
 
@@ -105,31 +98,19 @@ class InitializingState : public AtmState
 
     OperationResult initialize(
         std::shared_ptr<BankServer> bankServer,
-        std::shared_ptr<CashBin> cashBin) override;
+        std::shared_ptr<CashBin> cashBin,
+        std::shared_ptr<CardReader> cardReader) override;
 };
 
 class IdleState : public AtmState
 {
 public:
     AtmStateEnum getState() const override;
+    void react(const ErrorOccured &event) override;
     void react(const CardInserted &event) override;
-
-    OperationResult insertCard(const CashCard &cashCard) override;
 };
 
-class HasCardState : public AtmState
-{
-public:
-    virtual AtmStateEnum getState() const = 0;
-    OperationResult ejectCard() override
-    {
-        cashCard_ = CashCard();
-        accountSession_ = AccountSession();
-        AtmState::dispatch(CardEjected());
-    }
-};
-
-class ReadingCardState : public HasCardState
+class ReadingCardState : public AtmState
 {
 public:
     AtmStateEnum getState() const override;
@@ -139,16 +120,18 @@ public:
     void entry() override;
 };
 
-class ReadingPinState : public HasCardState
+class ReadingPinState : public AtmState
 {
 public:
     AtmStateEnum getState() const override;
     void react(const Canceled &event) override;
     void react(const ErrorOccured &event) override;
     void react(const PinVerified &event) override;
+
+    OperationResult enterPin(const PinNumber &pinNumber);
 };
 
-class SelectingAccountState : public HasCardState
+class SelectingAccountState : public AtmState
 {
 public:
     AtmStateEnum getState() const override;
@@ -157,7 +140,7 @@ public:
     void react(const AccountSelected &event) override;
 };
 
-class ChoosingTransactionState : public HasCardState
+class ChoosingTransactionState : public AtmState
 {
 public:
     AtmStateEnum getState() const override;
@@ -166,7 +149,7 @@ public:
     void react(const TransactionChosen &event) override;
 };
 
-class PerformingTransactionState : public HasCardState
+class PerformingTransactionState : public AtmState
 {
 public:
     AtmStateEnum getState() const override;
@@ -176,11 +159,13 @@ public:
     void react(const TransactionFinished &event) override;
 };
 
-class EjectingCardState : public HasCardState
+class EjectingCardState : public AtmState
 {
 public:
     AtmStateEnum getState() const override;
-    void react(const CardEjected &event) override;
+    void react(const CardPulledOut &event) override;
+
+    void entry() override;
 };
 
 class OutOfCashState : public AtmState
@@ -188,12 +173,16 @@ class OutOfCashState : public AtmState
 public:
     AtmStateEnum getState() const override;
     void react(const CashRefilled &event) override;
+
+    void entry() override;
 };
 
 class OutOfOrderState : public AtmState
 {
 public:
     AtmStateEnum getState() const override;
+
+    void entry() override;
 };
 
 #endif  // ATM_STATE_H_
