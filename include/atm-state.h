@@ -7,7 +7,7 @@
 #include "cash-card.h"
 #include "pin-number.h"
 #include "cash-bin.h"
-#include "account-info.h"
+#include "account.h"
 #include "bank-server.h"
 #include "atm-state-enum.h"
 
@@ -69,8 +69,9 @@ public:
         return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
     }
 
-    virtual OperationResult seeBalance()
+    virtual OperationResult seeBalance(AccountInfo &accountInfo)
     {
+        accountInfo = AccountInfo();
         return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
     }
 
@@ -94,7 +95,7 @@ protected:
     static std::shared_ptr<BankServer> bankServer_;
     static std::shared_ptr<CashBin> cashBin_;
     static CashCard cashCard_;
-    static AccountInfo accountInfo;
+    static AccountSession accountSession_;
 };
 
 class InitializingState : public AtmState

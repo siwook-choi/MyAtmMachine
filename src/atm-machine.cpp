@@ -31,9 +31,9 @@ OperationResult AtmMachine::selectAccount(AccountType accountType)
     return AtmState::current_state_ptr->selectAccount(accountType);
 }
 
-OperationResult AtmMachine::seeBalance()
+OperationResult AtmMachine::seeBalance(AccountInfo &accountInfo)
 {
-    return AtmState::current_state_ptr->seeBalance();
+    return AtmState::current_state_ptr->seeBalance(accountInfo);
 }
 
 OperationResult AtmMachine::deposit(unsigned int amount)

@@ -9,7 +9,7 @@ include_directories(
 )
 
 set(SOURCES
-    src/account-info.cpp
+    src/account.cpp
     src/atm-machine.cpp
     src/atm-state.cpp
     src/cash-card.cpp

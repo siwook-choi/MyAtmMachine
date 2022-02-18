@@ -7,7 +7,7 @@ std::function<void(AtmStateEnum)> AtmState::stateCallback_ = [](AtmStateEnum){};
 std::shared_ptr<BankServer> AtmState::bankServer_ = nullptr;
 std::shared_ptr<CashBin> AtmState::cashBin_ = nullptr;
 CashCard AtmState::cashCard_ = CashCard();
-AccountInfo AtmState::accountInfo = AccountInfo();
+AccountSession AtmState::accountSession_ = AccountSession();
 
 AtmStateEnum InitializingState::getState() const
 {

@@ -5,7 +5,7 @@
 #include "pin-number.h"
 #include "bank-server.h"
 #include "cash-bin.h"
-#include "account-info.h"
+#include "account.h"
 #include "operation-result.h"
 #include "atm-state-enum.h"
 
@@ -63,7 +63,7 @@ public:
      */
     static OperationResult selectAccount(AccountType accountType);
 
-    static OperationResult seeBalance();
+    static OperationResult seeBalance(AccountInfo &accountInfo);
     static OperationResult deposit(unsigned int amount);
     static OperationResult withdraw(unsigned int amount);
 
