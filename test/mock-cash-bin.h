@@ -13,6 +13,7 @@ public:
     MOCK_METHOD(void, setAmountCash, (unsigned int), (override));
     MOCK_METHOD(unsigned int, getAmountCash, (), (override));
     MOCK_METHOD(OperationResult, dispenseCash, (unsigned int), (override));
+    MOCK_METHOD(OperationResult, countCash, (unsigned int &), (override));
 };
 
 END_ATM_MACHINE

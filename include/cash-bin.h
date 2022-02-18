@@ -15,6 +15,7 @@ public:
     virtual unsigned int getAmountCash() = 0;
 
     virtual OperationResult dispenseCash(unsigned int amount) = 0;
+    virtual OperationResult countCash(unsigned int &amount) = 0;
 };
 
 END_ATM_MACHINE

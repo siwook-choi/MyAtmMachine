@@ -74,10 +74,9 @@ public:
     /**
      * @brief Deposit cash to current account.
      * Available when ATM is in ChoosingTransactionState.
-     * @param amount 
      * @return OperationResult 
      */
-    static OperationResult deposit(unsigned int amount);
+    static OperationResult deposit();
 
     /**
      * @brief Withdraw cash from current account.

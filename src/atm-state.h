@@ -71,7 +71,7 @@ public:
         return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
     }
 
-    virtual OperationResult deposit(unsigned int amount)
+    virtual OperationResult deposit()
     {
         return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
     }
@@ -165,12 +165,12 @@ public:
     void react(const TransactionChosen &event) override;
     
     OperationResult seeBalance(AccountInfo &accountInfo) override;
-    OperationResult deposit(unsigned int amount) override;
+    OperationResult deposit() override;
     OperationResult withdraw(unsigned int amount) override;
     OperationResult cancel() override;
 
 private:
-    OperationResult checkCashBinAmount(unsigned int amount);
+    OperationResult checkAmountCashLeft(unsigned int amount);
 };
 
 class PerformingTransactionState : public AtmState
