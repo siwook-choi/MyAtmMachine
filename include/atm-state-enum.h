@@ -1,7 +1,10 @@
 #ifndef ATM_STATE_ENUM_H_
 #define ATM_STATE_ENUM_H_
 
-// refs: https://www.geeksforgeeks.org/state-transition-diagram-for-an-atm-system/
+#include "atm-machine-global.h"
+
+BEGIN_ATM_MACHINE
+
 enum class AtmStateEnum
 {
     UndefinedState,
@@ -16,5 +19,7 @@ enum class AtmStateEnum
     OutOfCashState,
     OutOfOrderState
 };
+
+END_ATM_MACHINE
 
 #endif  // ATM_STATE_ENUM_H_

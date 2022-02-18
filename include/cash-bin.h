@@ -1,6 +1,10 @@
 #ifndef CASH_BIN_H_
 #define CASH_BIN_H_
 
+#include "atm-machine-global.h"
+
+BEGIN_ATM_MACHINE
+
 class CashBin
 {
 public:
@@ -12,5 +16,7 @@ public:
 
     virtual OperationResult dispenseCash(unsigned int amount) = 0;
 };
+
+END_ATM_MACHINE
 
 #endif // CASH_BIN_H_

@@ -1,6 +1,8 @@
 #include "atm-machine.h"
 #include "atm-state.h"
 
+BEGIN_ATM_MACHINE
+
 AtmStateEnum AtmMachine::getState()
 {
     return AtmState::current_state_ptr->getState();
@@ -54,3 +56,5 @@ void setStateCallback(std::function<void(AtmStateEnum)> stateCallback)
 {
     AtmState::setStateCallback(stateCallback);
 }
+
+END_ATM_MACHINE

@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
+#include "atm-machine-global.h"
 #include "atm-machine.h"
 #include "atm-state.h"
 #include "mock-bank-server.h"
@@ -8,6 +9,7 @@
 
 #include <memory>
 
+USING_ATM_MACHINE
 using namespace testing;
 
 TEST(TestAtmState, TestAtmState)

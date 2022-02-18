@@ -1,7 +1,9 @@
 #include "atm-state.h"
 #include "atm-machine.h"
 
-FSM_INITIAL_STATE(AtmState, InitializingState)
+FSM_INITIAL_STATE(ATM_MACHINE_NAMESPACE::AtmState, ATM_MACHINE_NAMESPACE::InitializingState)
+
+BEGIN_ATM_MACHINE
 
 std::function<void(AtmStateEnum)> AtmState::stateCallback_ = [](AtmStateEnum){};
 std::shared_ptr<BankServer> AtmState::bankServer_ = nullptr;
@@ -370,3 +372,5 @@ void OutOfOrderState::entry()
     if (cardReader_->hasCard())
         cardReader_->ejectCard();
 }
+
+END_ATM_MACHINE

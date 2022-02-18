@@ -1,6 +1,8 @@
 #include "pin-number.h"
 #include <stdexcept>
 
+BEGIN_ATM_MACHINE
+
 PinNumber::PinNumber(const std::string &pin)
     : pin_(pin)
 {
@@ -25,3 +27,5 @@ const std::string &PinNumber::toString() const
 {
     return pin_;
 }
+
+END_ATM_MACHINE

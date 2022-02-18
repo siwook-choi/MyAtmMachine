@@ -1,6 +1,8 @@
 #ifndef ATM_STATE_H_
 #define ATM_STATE_H_
 
+#include "atm-machine-global.h"
+
 #include "atm-event.h"
 #include "tinyfsm.hpp"
 #include "operation-result.h"
@@ -16,6 +18,8 @@
 #include <functional>
 #include <memory>
 #include <stdexcept>
+
+BEGIN_ATM_MACHINE
 
 class AtmState : public tinyfsm::MooreMachine<AtmState>
 {
@@ -203,5 +207,7 @@ public:
 
     void entry() override;
 };
+
+END_ATM_MACHINE
 
 #endif  // ATM_STATE_H_

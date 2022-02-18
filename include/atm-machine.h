@@ -1,6 +1,8 @@
 #ifndef ATM_MACHINE_H_
 #define ATM_MACHINE_H_
 
+#include "atm-machine-global.h"
+
 #include "bank-server.h"
 #include "cash-bin.h"
 #include "card-reader.h"
@@ -13,6 +15,8 @@
 
 #include <functional>
 #include <memory>
+
+BEGIN_ATM_MACHINE
 
 /**
  * @brief AtmMachine is a controller for a ATM machine.
@@ -96,5 +100,7 @@ public:
      */
     static void setStateCallback(std::function<void(AtmStateEnum)> stateCallback);
 };
+
+END_ATM_MACHINE
 
 #endif  // ATM_MACHINE_H_

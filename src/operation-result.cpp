@@ -1,5 +1,7 @@
 #include "operation-result.h"
 
+BEGIN_ATM_MACHINE
+
 OperationResult::OperationResult(ErrorCode code, const std::string &message)
     : code_(code)
     , message_(message)
@@ -28,3 +30,5 @@ const std::string &OperationResult::getMessage() const
 {
     return message_;
 }
+
+END_ATM_MACHINE

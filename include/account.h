@@ -1,7 +1,10 @@
 #ifndef ACCOUNT_H_
 #define ACCOUNT_H_
 
+#include "atm-machine-global.h"
 #include <string>
+
+BEGIN_ATM_MACHINE
 
 enum class AccountType {
     Unspecified,
@@ -50,5 +53,7 @@ private:
     AccountType type_;
     unsigned int balance_;
 };
+
+END_ATM_MACHINE
 
 #endif  // ACCOUNT_H_

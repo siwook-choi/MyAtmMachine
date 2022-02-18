@@ -1,5 +1,7 @@
 #include "account.h"
 
+BEGIN_ATM_MACHINE
+
 AccountId::AccountId(const std::string &id)
     : id_(id)
 {}
@@ -47,3 +49,5 @@ unsigned int AccountInfo::getBalance() const
 {
     return balance_;
 }
+
+END_ATM_MACHINE

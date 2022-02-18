@@ -1,7 +1,11 @@
 #ifndef OPERATION_RESULT_H_
 #define OPERATION_RESULT_H_
 
+#include "atm-machine-global.h"
+
 #include <string>
+
+BEGIN_ATM_MACHINE
 
 enum class ErrorCode
 {
@@ -28,5 +32,7 @@ private:
     ErrorCode code_;
     std::string message_;
 };
+
+END_ATM_MACHINE
 
 #endif  // OPERATION_RESULT_H_
