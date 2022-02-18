@@ -45,6 +45,11 @@ OperationResult AtmMachine::withdraw(unsigned int amount)
     return AtmState::current_state_ptr->withdraw(amount);
 }
 
+OperationResult AtmMachine::cancel()
+{
+    return AtmState::current_state_ptr->cancel();
+}
+
 void setStateCallback(std::function<void(AtmStateEnum)> stateCallback)
 {
     AtmState::setStateCallback(stateCallback);

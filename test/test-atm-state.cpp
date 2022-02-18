@@ -10,20 +10,20 @@
 
 using namespace testing;
 
-TEST(TestAtmMachine, TestAtmWithdrawl)
+TEST(TestAtmState, TestAtmState)
 {   
     auto bankServer = std::make_shared<MockBankServer>();
     auto cashBin = std::make_shared<MockCashBin>();
     auto cardReader = std::make_shared<MockCardReader>();
     
-    ON_CALL((*cardReader), hasCard())
-        .WillByDefault(Return(true));
+    EXPECT_CALL((*cardReader), hasCard())
+        .WillRepeatedly(Return(true));
 
-    ON_CALL((*cardReader), readCard(_))
-        .WillByDefault(Return(OperationResult()));
+    EXPECT_CALL((*cardReader), readCard(_))
+        .WillRepeatedly(Return(OperationResult()));
 
-    ON_CALL((*cardReader), ejectCard())
-        .WillByDefault(Return(OperationResult()));
+    EXPECT_CALL((*cardReader), ejectCard())
+        .WillRepeatedly(Return(OperationResult()));
     
     AtmMachine::initialize(bankServer, cashBin, cardReader);
     EXPECT_TRUE(AtmState::is_in_state<IdleState>());

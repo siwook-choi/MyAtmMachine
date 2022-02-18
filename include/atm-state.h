@@ -78,6 +78,11 @@ public:
         return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
     }
 
+    virtual OperationResult cancel()
+    {
+        return OperationResult(ErrorCode::InvalidOperation, "Invalid Operation");
+    }
+
     virtual OperationResult release();
 
     static void setStateCallback(std::function<void(AtmStateEnum)> stateCallback)
@@ -132,7 +137,8 @@ public:
     void react(const ErrorOccured &event) override;
     void react(const Authenticated &event) override;
 
-    OperationResult enterPin(const PinNumber &pinNumber);
+    OperationResult enterPin(const PinNumber &pinNumber) override;
+    OperationResult cancel() override;
 };
 
 class SelectingAccountState : public AtmState
@@ -143,7 +149,8 @@ public:
     void react(const ErrorOccured &event) override;
     void react(const AccountSelected &event) override;
 
-    OperationResult selectAccount(AccountType accountType);
+    OperationResult selectAccount(AccountType accountType) override;
+    OperationResult cancel() override;
 };
 
 class ChoosingTransactionState : public AtmState
@@ -153,6 +160,8 @@ public:
     void react(const Canceled &event) override;
     void react(const ErrorOccured &event) override;
     void react(const TransactionChosen &event) override;
+    
+    OperationResult cancel() override;
 };
 
 class PerformingTransactionState : public AtmState

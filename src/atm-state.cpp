@@ -13,6 +13,7 @@ AccountSession AtmState::accountSession_ = AccountSession();
 
 OperationResult AtmState::release()
 {
+    AtmState::set_initial_state();
     stateCallback_ = [](AtmStateEnum){};
     bankServer_= nullptr;
     cashBin_ = nullptr;
@@ -20,7 +21,6 @@ OperationResult AtmState::release()
     cashCard_ = CashCard();
     pinNumber_ = PinNumber();
     accountSession_ = AccountSession();
-    AtmState::set_initial_state();
 
     return OperationResult(ErrorCode::Ok, "");
 }
@@ -133,6 +133,12 @@ OperationResult AuthenticatingState::enterPin(const PinNumber &pinNumber)
     return result;
 }
 
+OperationResult AuthenticatingState::cancel()
+{
+    dispatch(Canceled());
+    return OperationResult(ErrorCode::Ok, "");
+}
+
 AtmStateEnum SelectingAccountState::getState() const
 {
     return AtmStateEnum::SelectingAccountState;
@@ -172,6 +178,12 @@ OperationResult SelectingAccountState::selectAccount(AccountType accountType)
     return result;
 }
 
+OperationResult SelectingAccountState::cancel()
+{
+    dispatch(Canceled());
+    return OperationResult(ErrorCode::Ok, "");
+}
+
 AtmStateEnum ChoosingTransactionState::getState() const
 {
     return AtmStateEnum::ChoosingTransactionState;
@@ -194,6 +206,12 @@ void ChoosingTransactionState::react(const ErrorOccured &event)
 void ChoosingTransactionState::react(const TransactionChosen &event)
 {
     transit<PerformingTransactionState>();
+}
+
+OperationResult ChoosingTransactionState::cancel()
+{
+    dispatch(Canceled());
+    return OperationResult(ErrorCode::Ok, "");
 }
 
 AtmStateEnum PerformingTransactionState::getState() const

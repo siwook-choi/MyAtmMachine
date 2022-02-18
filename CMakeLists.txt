@@ -29,6 +29,7 @@ if(CMAKE_TESTING_ENABLED)
 
     set(TEST_SOURCES
         test/main.cpp
+        test/test-atm-machine.cpp
         test/test-atm-state.cpp
     )
 
