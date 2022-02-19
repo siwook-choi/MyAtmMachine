@@ -9,6 +9,8 @@ BEGIN_ATM_MACHINE
 
 /**
  * @brief Interface of a card reader for the ATM machine.
+ * A valid CardReader should emit CardInserted event when card is inserted,
+ * and CardPulledOut event when card is pulled out.
  */
 class CardReader
 {
