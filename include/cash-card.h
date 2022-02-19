@@ -11,6 +11,7 @@ class CashCard
 {
 public:
     explicit CashCard(const std::string &id = "");
+
     const std::string &getId() const;
     
 private:

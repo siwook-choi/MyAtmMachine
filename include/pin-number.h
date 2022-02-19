@@ -8,6 +8,9 @@
 
 BEGIN_ATM_MACHINE
 
+/**
+ * @brief Pin Number object. A valid pin number should be a four digit integer.
+ */
 class PinNumber
 {
 public:

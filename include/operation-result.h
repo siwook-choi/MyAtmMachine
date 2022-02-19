@@ -18,14 +18,36 @@ enum class ErrorCode
     UnknownError
 };
 
+/**
+ * @brief Result of an operation.
+ */
 class OperationResult
 {
 public:
     explicit OperationResult(ErrorCode code = ErrorCode::Ok, const std::string &message = "");
 
+    /**
+     * @brief Check if operation has succeeded.
+     * @return true if the operation succeeded; false otherwise.
+     */
     bool isSucceed() const;
+
+    /**
+     * @brief Check if fatal error has occured.
+     * @return true if fatal error has occured; false otherwise.
+     */
     bool isFatal() const;
+
+    /**
+     * @brief Get the error code of the operation.
+     * @return ErrorCode 
+     */
     ErrorCode getCode() const;
+
+    /**
+     * @brief Get the message from the operation.
+     * @return Message
+     */
     const std::string &getMessage() const;
 
 private:
