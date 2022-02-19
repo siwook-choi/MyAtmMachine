@@ -10,11 +10,11 @@ BEGIN_ATM_MACHINE
 class CashCard
 {
 public:
-    explicit CashCard(const std::string &cardId = "");
-    const std::string &getCardId() const;
+    explicit CashCard(const std::string &id = "");
+    const std::string &getId() const;
     
 private:
-    std::string cardId_;
+    std::string id_;
 };
 
 END_ATM_MACHINE

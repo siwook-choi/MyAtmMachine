@@ -2,14 +2,14 @@
 
 BEGIN_ATM_MACHINE
 
-CashCard::CashCard(const std::string &cardId)
-    : cardId_(cardId)
+CashCard::CashCard(const std::string &id)
+    : id_(id)
 {
 }
 
-const std::string &CashCard::getCardId() const
+const std::string &CashCard::getId() const
 {
-    return cardId_;
+    return id_;
 }
 
 END_ATM_MACHINE
