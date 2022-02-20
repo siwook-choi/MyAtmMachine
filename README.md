@@ -27,7 +27,7 @@ make
 ```
 
 ## Atm States
-![AtmState](figures/AtmState.png)
+![AtmStateDiagram](figures/AtmStateDiagram.png)
 
 States of my ATM machine are as follow.  
 ### Initializing
