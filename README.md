@@ -37,13 +37,11 @@ Available Actions:
 
 ### Idle
 Idle state with an empty card reader.  
-Available Actions:
-* Insert Card
   
 ### Reading Card
 ATM is reading inserted card.
 
-### Reading Pin
+### Authenticating
 User have to enter PIN to proceed.  
 Available Actions:
 * Enter PIN
@@ -56,7 +54,7 @@ Available Actions:
 * Cancel
 
 ### Choosing Transaction
-User can start the transaction.  
+User can start a transaction.  
 Available Actions:
 * See Balance
 * Withdraw
@@ -64,7 +62,7 @@ Available Actions:
 * Cancel
 
 ### Performing Transaction
-ATM is performing Transaction
+ATM is performing a transaction
 
 ### Ejecting Card
 ATM is ejecting card.  
