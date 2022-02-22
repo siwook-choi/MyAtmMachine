@@ -55,4 +55,7 @@ if(CMAKE_TESTING_ENABLED)
         GTest::gtest
         GTest::gmock_main
         GTest::gtest_main)
+
+    add_test(${PROJECT_NAME}_test ${PROJECT_NAME}_test)
+    
 endif()

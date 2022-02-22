@@ -11,6 +11,10 @@ cmake version 3.16.3
 
 ## Build and Test
 ```bash
+# Install dependencies
+sudo apt-get update
+sudo apt-get install -y build-essential cmake
+
 # Clone project and init submodules
 git clone https://github.com/tldnr514/MyAtmMachine.git
 cd MyAtmMachine
@@ -22,8 +26,8 @@ cd $_
 cmake ..
 make
 
-# Execute test
-./my_atm_machine_test
+# Execute tests
+ctest --verbose
 ```
 
 ## Atm States
